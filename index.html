@@ -6,1031 +6,170 @@
     <title>Fleet Reserve - Car Booking System</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-card: #1a1a24;
-            --bg-hover: #22222e;
-            --accent-blue: #3b82f6;
-            --accent-purple: #8b5cf6;
-            --accent-green: #10b981;
-            --accent-orange: #f59e0b;
-            --accent-red: #ef4444;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --border-color: #2a2a38;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(ellipse at 20% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        /* Setup Screen */
-        .setup-screen {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-
-        .setup-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            max-width: 600px;
-            width: 100%;
-        }
-
-        .setup-card h1 {
-            font-size: 1.75rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .setup-card .subtitle {
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-        }
-
-        .setup-steps {
-            margin-bottom: 2rem;
-        }
-
-        .setup-step {
-            padding: 1rem;
-            background: var(--bg-secondary);
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
-
-        .setup-step h3 {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .setup-step h3 .step-num {
-            background: var(--accent-blue);
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-        }
-
-        .setup-step p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-left: 2rem;
-        }
-
-        .setup-step a {
-            color: var(--accent-blue);
-            text-decoration: none;
-        }
-
-        .setup-step a:hover {
-            text-decoration: underline;
-        }
-
-        .setup-step code {
-            background: var(--bg-primary);
-            padding: 0.125rem 0.375rem;
-            border-radius: 4px;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-        }
-
-        .api-input-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .api-input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .api-input-group input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-family: 'Space Mono', monospace;
-            font-size: 0.9rem;
-        }
-
-        .api-input-group input:focus {
-            outline: none;
-            border-color: var(--accent-blue);
-        }
-
-        .api-input-group .hint {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 0.5rem;
-        }
-
-        .setup-btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-family: inherit;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .setup-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
-        }
-
-        .setup-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .error-msg {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid var(--accent-red);
-            color: var(--accent-red);
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-        }
-
-        /* Header */
-        .header {
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .logo-icon {
-            width: 42px;
-            height: 42px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-        }
-
-        .logo-text {
-            font-family: 'Space Mono', monospace;
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .logo-text span {
-            color: var(--accent-blue);
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .sync-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.875rem;
-            transition: all 0.2s;
-        }
-
-        .sync-btn:hover {
-            border-color: var(--accent-blue);
-            color: var(--text-primary);
-        }
-
-        .sync-btn.syncing {
-            pointer-events: none;
-        }
-
-        .sync-btn.syncing .sync-icon {
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .admin-toggle {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .admin-toggle:hover {
-            border-color: var(--accent-purple);
-        }
-
-        .admin-toggle.active {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(99, 102, 241, 0.2));
-            border-color: var(--accent-purple);
-        }
-
-        .toggle-switch {
-            width: 36px;
-            height: 20px;
-            background: var(--bg-primary);
-            border-radius: 10px;
-            position: relative;
-            transition: all 0.3s;
-        }
-
-        .admin-toggle.active .toggle-switch {
-            background: var(--accent-purple);
-        }
-
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            background: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: all 0.3s;
-        }
-
-        .admin-toggle.active .toggle-switch::after {
-            left: 18px;
-        }
-
-        /* Main Layout */
-        .main-container {
-            display: flex;
-            min-height: calc(100vh - 70px);
-        }
-
-        .app-container {
-            display: none;
-        }
-
-        .app-container.active {
-            display: block;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 280px;
-            background: var(--bg-secondary);
-            border-right: 1px solid var(--border-color);
-            padding: 1.5rem;
-            overflow-y: auto;
-        }
-
-        .sidebar-title {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .car-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .car-item {
-            padding: 0.75rem 1rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .car-item:hover {
-            border-color: var(--accent-blue);
-            transform: translateX(4px);
-        }
-
-        .car-item.selected {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(99, 102, 241, 0.15));
-            border-color: var(--accent-blue);
-        }
-
-        .car-info {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .car-icon {
-            font-size: 1.25rem;
-        }
-
-        .car-name {
-            font-weight: 500;
-        }
-
-        .car-plate {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .delete-car {
-            background: none;
-            border: none;
-            color: var(--accent-red);
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.2s;
-            padding: 0.25rem;
-            font-size: 1rem;
-        }
-
-        .car-item:hover .delete-car {
-            opacity: 1;
-        }
-
-        .add-car-form {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: var(--bg-card);
-            border: 1px dashed var(--border-color);
-            border-radius: 8px;
-        }
-
-        .form-group {
-            margin-bottom: 0.75rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.25rem;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 0.5rem 0.75rem;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            color: var(--text-primary);
-            font-family: inherit;
-            transition: border-color 0.2s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--accent-blue);
-        }
-
-        .btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 6px;
-            font-family: inherit;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn-secondary {
-            background: var(--bg-hover);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-sm {
-            padding: 0.375rem 0.75rem;
-            font-size: 0.875rem;
-        }
-
-        /* Calendar Container */
-        .calendar-container {
-            flex: 1;
-            padding: 2rem;
-            overflow-y: auto;
-        }
-
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .calendar-nav {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .nav-btn {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .nav-btn:hover {
-            background: var(--bg-hover);
-            border-color: var(--accent-blue);
-        }
-
-        .current-month {
-            font-family: 'Space Mono', monospace;
-            font-size: 1.5rem;
-            font-weight: 700;
-            min-width: 220px;
-            text-align: center;
-        }
-
-        .today-btn {
-            padding: 0.5rem 1rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-primary);
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.2s;
-        }
-
-        .today-btn:hover {
-            background: var(--bg-hover);
-        }
-
-        .legend {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .legend-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 3px;
-        }
-
-        .legend-dot.morning {
-            background: linear-gradient(135deg, #f59e0b, #fbbf24);
-        }
-
-        .legend-dot.evening {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-        }
-
-        .legend-dot.booked {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-        }
-
-        .calendar-grid {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .calendar-weekdays {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .weekday {
-            padding: 1rem;
-            text-align: center;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-        }
-
-        .calendar-days {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-        }
-
-        .calendar-day {
-            min-height: 100px;
-            padding: 0.5rem;
-            border-right: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            background: var(--bg-card);
-            transition: background 0.2s;
-        }
-
-        .calendar-day:nth-child(7n) {
-            border-right: none;
-        }
-
-        .calendar-day:hover {
-            background: var(--bg-hover);
-        }
-
-        .calendar-day.other-month {
-            background: var(--bg-secondary);
-            opacity: 0.5;
-        }
-
-        .calendar-day.today {
-            background: rgba(59, 130, 246, 0.1);
-        }
-
-        .day-number {
-            font-family: 'Space Mono', monospace;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .calendar-day.today .day-number span {
-            background: var(--accent-blue);
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-        }
-
-        .booking-slots {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .booking-slot {
-            padding: 0.375rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .booking-slot.morning {
-            background: linear-gradient(135deg, #f59e0b, #fbbf24);
-            color: #1a1a24;
-        }
-
-        .booking-slot.evening {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
-        }
-
-        .booking-slot.available:hover {
-            transform: scale(1.02);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .booking-slot.booked {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-            cursor: default;
-        }
-
-        .booking-slot.booked.admin-view {
-            cursor: pointer;
-        }
-
-        .slot-label {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-
-        .booked-by {
-            font-size: 0.65rem;
-            opacity: 0.9;
-            max-width: 60px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .remove-booking {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.2s;
-            font-size: 0.75rem;
-        }
-
-        .booking-slot.booked.admin-view:hover .remove-booking {
-            opacity: 1;
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            width: 100%;
-            max-width: 400px;
-            margin: 1rem;
-            transform: translateY(20px);
-            transition: transform 0.3s;
-        }
-
-        .modal-overlay.active .modal {
-            transform: translateY(0);
-        }
-
-        .modal-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
-        }
-
-        .modal-actions .btn {
-            flex: 1;
-        }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            padding: 1rem 1.5rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s;
-            z-index: 1001;
-        }
-
-        .toast.active {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .toast.success {
-            border-color: var(--accent-green);
-        }
-
-        .toast.error {
-            border-color: var(--accent-red);
-        }
-
-        /* No Car Selected */
-        .no-car-selected {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            min-height: 400px;
-            text-align: center;
-            color: var(--text-muted);
-        }
-
-        .no-car-selected .icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        .no-car-selected h2 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
-        }
-
-        /* Loading */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-primary);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-
-        .loading-overlay .spinner {
-            font-size: 4rem;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .main-container {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                border-right: none;
-                border-bottom: 1px solid var(--border-color);
-            }
-
-            .calendar-container {
-                padding: 1rem;
-            }
-
-            .calendar-day {
-                min-height: 80px;
-            }
-
-            .booking-slot {
-                font-size: 0.6rem;
-                padding: 0.25rem;
-            }
-
-            .header {
-                padding: 1rem;
-            }
-
-            .header-actions {
-                gap: 0.5rem;
-            }
-
-            .sync-btn span:not(.sync-icon) {
-                display: none;
-            }
-        }
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-card: #1a1a24; --bg-hover: #22222e; --accent-blue: #3b82f6; --accent-purple: #8b5cf6; --accent-green: #10b981; --accent-red: #ef4444; --text-primary: #f8fafc; --text-secondary: #94a3b8; --text-muted: #64748b; --border-color: #2a2a38; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at 20% 20%, rgba(59,130,246,0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(139,92,246,0.08) 0%, transparent 50%); pointer-events: none; z-index: -1; }
+        .config-notice { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .config-card { background: var(--bg-card); border: 1px solid var(--accent-red); border-radius: 16px; padding: 2.5rem; max-width: 600px; width: 100%; text-align: center; }
+        .config-card h1 { color: var(--accent-red); margin-bottom: 1rem; }
+        .config-card code { display: block; background: var(--bg-primary); padding: 1rem; border-radius: 8px; margin: 1rem 0; text-align: left; font-family: 'Space Mono', monospace; font-size: 0.85rem; }
+        .header { background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
+        .logo { display: flex; align-items: center; gap: 0.75rem; }
+        .logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+        .logo-text { font-family: 'Space Mono', monospace; font-size: 1.25rem; font-weight: 700; }
+        .logo-text span { color: var(--accent-blue); }
+        .header-actions { display: flex; align-items: center; gap: 1rem; }
+        .sync-btn { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-secondary); cursor: pointer; font-family: inherit; font-size: 0.875rem; transition: all 0.2s; }
+        .sync-btn:hover { border-color: var(--accent-blue); color: var(--text-primary); }
+        .sync-btn.syncing .sync-icon { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .admin-toggle { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .admin-toggle:hover { border-color: var(--accent-purple); }
+        .admin-toggle.active { background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(99,102,241,0.2)); border-color: var(--accent-purple); }
+        .toggle-switch { width: 36px; height: 20px; background: var(--bg-primary); border-radius: 10px; position: relative; transition: all 0.3s; }
+        .admin-toggle.active .toggle-switch { background: var(--accent-purple); }
+        .toggle-switch::after { content: ''; position: absolute; width: 16px; height: 16px; background: white; border-radius: 50%; top: 2px; left: 2px; transition: all 0.3s; }
+        .admin-toggle.active .toggle-switch::after { left: 18px; }
+        .main-container { display: flex; min-height: calc(100vh - 70px); }
+        .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border-color); padding: 1.5rem; overflow-y: auto; }
+        .sidebar-title { font-family: 'Space Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .car-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        .car-item { padding: 0.75rem 1rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: space-between; }
+        .car-item:hover { border-color: var(--accent-blue); transform: translateX(4px); }
+        .car-item.selected { background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(99,102,241,0.15)); border-color: var(--accent-blue); }
+        .car-info { display: flex; align-items: center; gap: 0.75rem; }
+        .car-icon { font-size: 1.25rem; }
+        .car-name { font-weight: 500; }
+        .car-plate { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--text-muted); }
+        .delete-car { background: none; border: none; color: var(--accent-red); cursor: pointer; opacity: 0; transition: opacity 0.2s; padding: 0.25rem; font-size: 1rem; }
+        .car-item:hover .delete-car { opacity: 1; }
+        .add-car-form { margin-top: 1rem; padding: 1rem; background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: 8px; }
+        .form-group { margin-bottom: 0.75rem; }
+        .form-group label { display: block; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.25rem; }
+        .form-group input { width: 100%; padding: 0.5rem 0.75rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary); font-family: inherit; }
+        .form-group input:focus { outline: none; border-color: var(--accent-blue); }
+        .btn { padding: 0.5rem 1rem; border: none; border-radius: 6px; font-family: inherit; font-weight: 500; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .btn-primary { background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); color: white; }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,130,246,0.3); }
+        .btn-secondary { background: var(--bg-hover); color: var(--text-primary); border: 1px solid var(--border-color); }
+        .btn-sm { padding: 0.375rem 0.75rem; font-size: 0.875rem; }
+        .calendar-container { flex: 1; padding: 2rem; overflow-y: auto; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+        .calendar-nav { display: flex; align-items: center; gap: 1rem; }
+        .nav-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); cursor: pointer; transition: all 0.2s; }
+        .nav-btn:hover { background: var(--bg-hover); border-color: var(--accent-blue); }
+        .current-month { font-family: 'Space Mono', monospace; font-size: 1.5rem; font-weight: 700; min-width: 220px; text-align: center; }
+        .today-btn { padding: 0.5rem 1rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); cursor: pointer; font-family: inherit; }
+        .today-btn:hover { background: var(--bg-hover); }
+        .legend { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-secondary); }
+        .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+        .legend-dot.morning { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+        .legend-dot.evening { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+        .legend-dot.booked { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .calendar-grid { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; }
+        .calendar-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); }
+        .weekday { padding: 1rem; text-align: center; font-family: 'Space Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+        .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); }
+        .calendar-day { min-height: 100px; padding: 0.5rem; border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); background: var(--bg-card); transition: background 0.2s; }
+        .calendar-day:nth-child(7n) { border-right: none; }
+        .calendar-day:hover { background: var(--bg-hover); }
+        .calendar-day.other-month { background: var(--bg-secondary); opacity: 0.5; }
+        .calendar-day.today { background: rgba(59,130,246,0.1); }
+        .day-number { font-family: 'Space Mono', monospace; font-weight: 600; margin-bottom: 0.5rem; }
+        .calendar-day.today .day-number span { background: var(--accent-blue); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; }
+        .booking-slots { display: flex; flex-direction: column; gap: 0.25rem; }
+        .booking-slot { padding: 0.375rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: space-between; }
+        .booking-slot.morning { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #1a1a24; }
+        .booking-slot.evening { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; }
+        .booking-slot.available:hover { transform: scale(1.02); box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+        .booking-slot.booked { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; cursor: default; }
+        .booking-slot.booked.admin-view { cursor: pointer; }
+        .slot-label { display: flex; align-items: center; gap: 0.25rem; }
+        .booked-by { font-size: 0.65rem; opacity: 0.9; max-width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .remove-booking { background: none; border: none; color: white; cursor: pointer; opacity: 0; transition: opacity 0.2s; font-size: 0.75rem; }
+        .booking-slot.booked.admin-view:hover .remove-booking { opacity: 1; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem; width: 100%; max-width: 400px; margin: 1rem; transform: translateY(20px); transition: transform 0.3s; }
+        .modal-overlay.active .modal { transform: translateY(0); }
+        .modal-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .modal-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+        .modal-actions .btn { flex: 1; }
+        .toast { position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; gap: 0.75rem; transform: translateY(100px); opacity: 0; transition: all 0.3s; z-index: 1001; }
+        .toast.active { transform: translateY(0); opacity: 1; }
+        .toast.success { border-color: var(--accent-green); }
+        .toast.error { border-color: var(--accent-red); }
+        .no-car-selected { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 400px; text-align: center; color: var(--text-muted); }
+        .no-car-selected .icon { font-size: 4rem; margin-bottom: 1rem; opacity: 0.5; }
+        .no-car-selected h2 { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text-secondary); }
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2000; }
+        .loading-overlay .spinner { font-size: 4rem; animation: spin 1s linear infinite; margin-bottom: 1rem; }
+        @media (max-width: 768px) { .main-container { flex-direction: column; } .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); } .calendar-container { padding: 1rem; } .calendar-day { min-height: 80px; } .booking-slot { font-size: 0.6rem; padding: 0.25rem; } .header { padding: 1rem; } .header-actions { gap: 0.5rem; } .sync-btn span:not(.sync-icon) { display: none; } }
     </style>
 </head>
 <body>
-    <!-- Setup Screen -->
-    <div id="setup-screen" class="setup-screen">
-        <div class="setup-card">
-            <h1>🚗 Fleet Reserve Setup</h1>
-            <p class="subtitle">One-time setup to enable cloud storage for shared bookings</p>
-            
-            <div class="setup-steps">
-                <div class="setup-step">
-                    <h3><span class="step-num">1</span> Create JSONBin Account</h3>
-                    <p>Go to <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> and sign up for a free account</p>
-                </div>
-                <div class="setup-step">
-                    <h3><span class="step-num">2</span> Get Your API Key</h3>
-                    <p>After login, go to <strong>API Keys</strong> tab and copy your <code>X-Master-Key</code></p>
-                </div>
-                <div class="setup-step">
-                    <h3><span class="step-num">3</span> Enter API Key Below</h3>
-                    <p>Paste your API key to connect to cloud storage</p>
-                </div>
-            </div>
+    <script>
+        // ╔═══════════════════════════════════════════════════════════════════╗
+        // ║  CONFIGURATION - EDIT THESE VALUES BEFORE UPLOADING TO GITHUB    ║
+        // ╠═══════════════════════════════════════════════════════════════════╣
+        // ║  1. Go to https://jsonbin.io and create a free account           ║
+        // ║  2. Copy your X-Master-Key from the API Keys page                ║
+        // ║  3. Replace 'YOUR_API_KEY_HERE' below with your key              ║
+        // ║  4. Upload to GitHub, open the page                              ║
+        // ║  5. Copy the BIN_ID from the popup and paste it below            ║
+        // ║  6. Re-upload to GitHub - now everyone shares the same data!     ║
+        // ╚═══════════════════════════════════════════════════════════════════╝
+        
+        const CONFIG = {
+            API_KEY: '$2a$10$AUV97K0KjslbXeTkVR9PIOA/8PpTbbOzNYsSt0SL0MQ0oukRVSZhe',  // Your X-Master-Key from jsonbin.io
+            BIN_ID: ''                      // Fill this after first run
+        };
+        const ADMIN_CODE = '1234';
+    </script>
 
-            <div id="setup-error" class="error-msg" style="display: none;"></div>
-
-            <div class="api-input-group">
-                <label>JSONBin API Key (X-Master-Key)</label>
-                <input type="text" id="api-key-input" placeholder="$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
-                <p class="hint">Your API key is stored locally in your browser and never shared</p>
-            </div>
-
-            <button id="setup-btn" class="setup-btn" onclick="initializeApp()">
-                Connect & Start
-            </button>
+    <div id="config-notice" class="config-notice" style="display:none;">
+        <div class="config-card">
+            <h1>⚠️ Configuration Required</h1>
+            <p>Edit the index.html file and set your JSONBin API key.</p>
+            <code>API_KEY: 'YOUR_API_KEY_HERE'  // Replace this</code>
+            <p style="margin-top:1rem;color:var(--text-secondary);">Get your free API key at <a href="https://jsonbin.io" target="_blank" style="color:var(--accent-blue);">jsonbin.io</a></p>
         </div>
     </div>
 
-    <!-- Main App -->
-    <div id="app-container" class="app-container">
-        <!-- Header -->
+    <div id="app-container" style="display:none;">
         <header class="header">
-            <div class="logo">
-                <div class="logo-icon">🚗</div>
-                <div class="logo-text">Fleet<span>Reserve</span></div>
-            </div>
+            <div class="logo"><div class="logo-icon">🚗</div><div class="logo-text">Fleet<span>Reserve</span></div></div>
             <div class="header-actions">
-                <button class="sync-btn" id="sync-btn" onclick="loadData()">
-                    <span class="sync-icon">🔄</span>
-                    <span>Sync</span>
-                </button>
-                <div class="admin-toggle" id="admin-toggle" onclick="handleAdminToggle()">
-                    <span id="admin-icon">🔒</span>
-                    <span>Admin</span>
-                    <div class="toggle-switch"></div>
-                </div>
+                <button class="sync-btn" id="sync-btn" onclick="loadData()"><span class="sync-icon">🔄</span><span>Sync</span></button>
+                <div class="admin-toggle" id="admin-toggle" onclick="handleAdminToggle()"><span id="admin-icon">🔒</span><span>Admin</span><div class="toggle-switch"></div></div>
             </div>
         </header>
-
         <div class="main-container">
-            <!-- Sidebar -->
             <aside class="sidebar">
-                <div class="sidebar-title">
-                    <span>🚗</span>
-                    <span>Fleet Vehicles</span>
-                </div>
+                <div class="sidebar-title"><span>🚗</span><span>Fleet Vehicles</span></div>
                 <div class="car-list" id="car-list"></div>
-                <div class="add-car-form" id="add-car-form" style="display: none;">
-                    <div class="form-group">
-                        <label>Car Name</label>
-                        <input type="text" id="new-car-name" placeholder="e.g., Toyota Corolla">
-                    </div>
-                    <div class="form-group">
-                        <label>License Plate</label>
-                        <input type="text" id="new-car-plate" placeholder="e.g., ABC-1234">
-                    </div>
-                    <button class="btn btn-primary btn-sm" onclick="addCar()">
-                        <span>+</span>
-                        <span>Add Vehicle</span>
-                    </button>
+                <div class="add-car-form" id="add-car-form" style="display:none;">
+                    <div class="form-group"><label>Car Name</label><input type="text" id="new-car-name" placeholder="e.g., Toyota Corolla"></div>
+                    <div class="form-group"><label>License Plate</label><input type="text" id="new-car-plate" placeholder="e.g., ABC-1234"></div>
+                    <button class="btn btn-primary btn-sm" onclick="addCar()"><span>+</span><span>Add Vehicle</span></button>
                 </div>
             </aside>
-
-            <!-- Calendar -->
-            <main class="calendar-container" id="calendar-container">
-                <div class="no-car-selected" id="no-car-message">
-                    <div class="icon">🚗</div>
-                    <h2>Select a Vehicle</h2>
-                    <p>Choose a car from the sidebar to view and manage bookings</p>
-                </div>
-                <div id="calendar-view" style="display: none;">
+            <main class="calendar-container">
+                <div class="no-car-selected" id="no-car-message"><div class="icon">🚗</div><h2>Select a Vehicle</h2><p>Choose a car from the sidebar to view and manage bookings</p></div>
+                <div id="calendar-view" style="display:none;">
                     <div class="calendar-header">
-                        <div class="calendar-nav">
-                            <button class="nav-btn" onclick="prevMonth()">◀</button>
-                            <h2 class="current-month" id="current-month"></h2>
-                            <button class="nav-btn" onclick="nextMonth()">▶</button>
-                        </div>
+                        <div class="calendar-nav"><button class="nav-btn" onclick="prevMonth()">◀</button><h2 class="current-month" id="current-month"></h2><button class="nav-btn" onclick="nextMonth()">▶</button></div>
                         <button class="today-btn" onclick="goToToday()">Today</button>
                     </div>
                     <div class="legend">
-                        <div class="legend-item">
-                            <div class="legend-dot morning"></div>
-                            <span>Morning (6AM - 12PM)</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-dot evening"></div>
-                            <span>Evening (12PM - 10PM)</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-dot booked"></div>
-                            <span>Booked</span>
-                        </div>
+                        <div class="legend-item"><div class="legend-dot morning"></div><span>Morning (6AM-12PM)</span></div>
+                        <div class="legend-item"><div class="legend-dot evening"></div><span>Evening (12PM-10PM)</span></div>
+                        <div class="legend-item"><div class="legend-dot booked"></div><span>Booked</span></div>
                     </div>
                     <div class="calendar-grid">
-                        <div class="calendar-weekdays">
-                            <div class="weekday">Sun</div>
-                            <div class="weekday">Mon</div>
-                            <div class="weekday">Tue</div>
-                            <div class="weekday">Wed</div>
-                            <div class="weekday">Thu</div>
-                            <div class="weekday">Fri</div>
-                            <div class="weekday">Sat</div>
-                        </div>
+                        <div class="calendar-weekdays"><div class="weekday">Sun</div><div class="weekday">Mon</div><div class="weekday">Tue</div><div class="weekday">Wed</div><div class="weekday">Thu</div><div class="weekday">Fri</div><div class="weekday">Sat</div></div>
                         <div class="calendar-days" id="calendar-days"></div>
                     </div>
                 </div>
@@ -1038,578 +177,147 @@
         </div>
     </div>
 
-    <!-- Admin Modal -->
-    <div class="modal-overlay" id="admin-modal">
-        <div class="modal">
-            <h3 class="modal-title">🔒 Admin Authentication</h3>
-            <div class="form-group">
-                <label>Enter Admin Code</label>
-                <input type="password" id="admin-code" placeholder="Enter code...">
-            </div>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeAdminModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="verifyAdminCode()">Verify</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Booking Modal -->
-    <div class="modal-overlay" id="booking-modal">
-        <div class="modal">
-            <h3 class="modal-title">📅 Book Vehicle</h3>
-            <p id="booking-info" style="color: var(--text-secondary); margin-bottom: 1rem;"></p>
-            <div class="form-group">
-                <label>Your Name</label>
-                <input type="text" id="booker-name" placeholder="Enter your name...">
-            </div>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeBookingModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="confirmBooking()">Confirm Booking</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast -->
-    <div class="toast" id="toast">
-        <span id="toast-icon">✓</span>
-        <span id="toast-message"></span>
-    </div>
-
-    <!-- Loading -->
-    <div class="loading-overlay" id="loading" style="display: none;">
-        <div class="spinner">🚗</div>
-        <p>Loading...</p>
-    </div>
+    <div class="modal-overlay" id="admin-modal"><div class="modal"><h3 class="modal-title">🔒 Admin Authentication</h3><div class="form-group"><label>Enter Admin Code</label><input type="password" id="admin-code" placeholder="Enter code..."></div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeAdminModal()">Cancel</button><button class="btn btn-primary" onclick="verifyAdminCode()">Verify</button></div></div></div>
+    <div class="modal-overlay" id="booking-modal"><div class="modal"><h3 class="modal-title">📅 Book Vehicle</h3><p id="booking-info" style="color:var(--text-secondary);margin-bottom:1rem;"></p><div class="form-group"><label>Your Name</label><input type="text" id="booker-name" placeholder="Enter your name..."></div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeBookingModal()">Cancel</button><button class="btn btn-primary" onclick="confirmBooking()">Confirm Booking</button></div></div></div>
+    <div class="toast" id="toast"><span id="toast-icon">✓</span><span id="toast-message"></span></div>
+    <div class="loading-overlay" id="loading"><div class="spinner">🚗</div><p>Loading Fleet Reserve...</p></div>
 
     <script>
-        // Configuration
         const JSONBIN_API = 'https://api.jsonbin.io/v3';
-        const ADMIN_CODE = '1234';
-        const CAR_ICONS = ['🚗', '🚙', '🚐', '🚕', '🚘', '🏎️'];
-        const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June',
-                            'July', 'August', 'September', 'October', 'November', 'December'];
+        const CAR_ICONS = ['🚗','🚙','🚐','🚕','🚘','🏎️'];
+        const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        const DEFAULT_DATA = { cars: [{id:'1',name:'Toyota Camry',plate:'ABC-1234',icon:'🚗'},{id:'2',name:'Honda CR-V',plate:'XYZ-5678',icon:'🚙'},{id:'3',name:'Ford Transit',plate:'DEF-9012',icon:'🚐'}], bookings: {} };
 
-        // State
-        let state = {
-            apiKey: localStorage.getItem('fleet_api_key') || '',
-            binId: localStorage.getItem('fleet_bin_id') || '',
-            cars: [],
-            bookings: {},
-            selectedCar: null,
-            currentDate: new Date(),
-            isAdmin: false,
-            pendingBooking: null
-        };
+        let state = { binId: CONFIG.BIN_ID, cars: [], bookings: {}, selectedCar: null, currentDate: new Date(), isAdmin: false, pendingBooking: null };
 
-        // Default data
-        const DEFAULT_DATA = {
-            cars: [
-                { id: '1', name: 'Toyota Camry', plate: 'ABC-1234', icon: '🚗' },
-                { id: '2', name: 'Honda CR-V', plate: 'XYZ-5678', icon: '🚙' },
-                { id: '3', name: 'Ford Transit', plate: 'DEF-9012', icon: '🚐' }
-            ],
-            bookings: {}
-        };
-
-        // Initialize app
-        async function initializeApp() {
-            const apiKeyInput = document.getElementById('api-key-input');
-            const apiKey = apiKeyInput.value.trim();
-            
-            if (!apiKey) {
-                showSetupError('Please enter your API key');
+        async function init() {
+            if (!CONFIG.API_KEY || CONFIG.API_KEY === 'YOUR_API_KEY_HERE') {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('config-notice').style.display = 'flex';
                 return;
             }
-
-            document.getElementById('setup-btn').disabled = true;
-            document.getElementById('setup-btn').textContent = 'Connecting...';
-
             try {
-                // Store API key
-                localStorage.setItem('fleet_api_key', apiKey);
-                state.apiKey = apiKey;
-
-                // Check if we have an existing bin
-                let binId = localStorage.getItem('fleet_bin_id');
-                
-                if (binId) {
-                    // Try to load existing bin
-                    try {
-                        await loadDataFromBin(binId);
-                    } catch (e) {
-                        // Bin doesn't exist or error, create new one
-                        binId = await createNewBin();
-                    }
-                } else {
-                    // Create new bin
-                    binId = await createNewBin();
-                }
-
-                // Show main app
-                document.getElementById('setup-screen').style.display = 'none';
-                document.getElementById('app-container').classList.add('active');
-                
-                renderCarList();
-                renderCalendar();
-
+                if (CONFIG.BIN_ID) { await loadDataFromBin(); } else { await createNewBin(); }
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('app-container').style.display = 'block';
+                renderCarList(); renderCalendar();
+                setInterval(loadData, 30000);
             } catch (error) {
-                console.error('Init error:', error);
-                showSetupError('Failed to connect. Please check your API key.');
-                document.getElementById('setup-btn').disabled = false;
-                document.getElementById('setup-btn').textContent = 'Connect & Start';
+                document.getElementById('loading').innerHTML = '<div style="text-align:center;color:var(--accent-red);"><h2>⚠️ Connection Error</h2><p>'+error.message+'</p></div>';
             }
         }
 
-        // Create new JSONBin
         async function createNewBin() {
-            const response = await fetch(`${JSONBIN_API}/b`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': state.apiKey,
-                    'X-Bin-Name': 'fleet-reserve-data'
-                },
-                body: JSON.stringify(DEFAULT_DATA)
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to create bin');
-            }
-
+            const response = await fetch(JSONBIN_API+'/b', { method:'POST', headers:{'Content-Type':'application/json','X-Master-Key':CONFIG.API_KEY,'X-Bin-Name':'fleet-reserve','X-Bin-Private':'false'}, body:JSON.stringify(DEFAULT_DATA) });
+            if (!response.ok) throw new Error('Failed to create database');
             const data = await response.json();
-            const binId = data.metadata.id;
-            
-            localStorage.setItem('fleet_bin_id', binId);
-            state.binId = binId;
+            state.binId = data.metadata.id;
             state.cars = DEFAULT_DATA.cars;
             state.bookings = DEFAULT_DATA.bookings;
-
-            return binId;
+            alert('✅ Database created!\n\n📋 Copy this BIN_ID to your index.html:\n\n'+state.binId+'\n\nThen re-upload to GitHub.');
         }
 
-        // Load data from bin
-        async function loadDataFromBin(binId) {
-            const response = await fetch(`${JSONBIN_API}/b/${binId}/latest`, {
-                headers: {
-                    'X-Master-Key': state.apiKey
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to load bin');
-            }
-
+        async function loadDataFromBin() {
+            const response = await fetch(JSONBIN_API+'/b/'+state.binId+'/latest', { headers:{'X-Master-Key':CONFIG.API_KEY} });
+            if (!response.ok) throw new Error('Failed to load data');
             const data = await response.json();
-            state.binId = binId;
             state.cars = data.record.cars || [];
             state.bookings = data.record.bookings || {};
         }
 
-        // Save data to bin
         async function saveData() {
-            if (!state.binId || !state.apiKey) return;
-
+            if (!state.binId) return;
             try {
-                const response = await fetch(`${JSONBIN_API}/b/${state.binId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': state.apiKey
-                    },
-                    body: JSON.stringify({
-                        cars: state.cars,
-                        bookings: state.bookings
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to save');
-                }
-            } catch (error) {
-                console.error('Save error:', error);
-                showToast('Failed to save changes', 'error');
-            }
+                await fetch(JSONBIN_API+'/b/'+state.binId, { method:'PUT', headers:{'Content-Type':'application/json','X-Master-Key':CONFIG.API_KEY}, body:JSON.stringify({cars:state.cars,bookings:state.bookings}) });
+            } catch (e) { showToast('Failed to save','error'); }
         }
 
-        // Load/refresh data
         async function loadData() {
-            if (!state.binId || !state.apiKey) return;
-
-            const syncBtn = document.getElementById('sync-btn');
-            syncBtn.classList.add('syncing');
-
-            try {
-                await loadDataFromBin(state.binId);
-                renderCarList();
-                renderCalendar();
-                showToast('Data synced!', 'success');
-            } catch (error) {
-                console.error('Load error:', error);
-                showToast('Failed to sync', 'error');
-            } finally {
-                syncBtn.classList.remove('syncing');
-            }
+            if (!state.binId) return;
+            document.getElementById('sync-btn').classList.add('syncing');
+            try { await loadDataFromBin(); renderCarList(); renderCalendar(); showToast('Data synced!','success'); }
+            catch (e) { showToast('Failed to sync','error'); }
+            finally { document.getElementById('sync-btn').classList.remove('syncing'); }
         }
 
-        // Show setup error
-        function showSetupError(msg) {
-            const errorEl = document.getElementById('setup-error');
-            errorEl.textContent = msg;
-            errorEl.style.display = 'block';
+        function showToast(msg, type='success') {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-icon').textContent = type==='success'?'✓':'!';
+            document.getElementById('toast-message').textContent = msg;
+            t.className = 'toast active '+type;
+            setTimeout(()=>t.classList.remove('active'), 3000);
         }
 
-        // Toast notification
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const icon = document.getElementById('toast-icon');
-            const msg = document.getElementById('toast-message');
-            
-            icon.textContent = type === 'success' ? '✓' : '!';
-            msg.textContent = message;
-            toast.className = `toast active ${type}`;
-            
-            setTimeout(() => {
-                toast.classList.remove('active');
-            }, 3000);
-        }
-
-        // Render car list
         function renderCarList() {
-            const container = document.getElementById('car-list');
-            container.innerHTML = state.cars.map(car => `
-                <div class="car-item ${state.selectedCar === car.id ? 'selected' : ''}" 
-                     onclick="selectCar('${car.id}')">
-                    <div class="car-info">
-                        <span class="car-icon">${car.icon}</span>
-                        <div>
-                            <div class="car-name">${car.name}</div>
-                            <div class="car-plate">${car.plate}</div>
-                        </div>
-                    </div>
-                    ${state.isAdmin ? `
-                        <button class="delete-car" onclick="event.stopPropagation(); deleteCar('${car.id}')">✕</button>
-                    ` : ''}
-                </div>
-            `).join('');
-
-            // Show/hide add car form
-            document.getElementById('add-car-form').style.display = state.isAdmin ? 'block' : 'none';
+            document.getElementById('car-list').innerHTML = state.cars.map(c=>'<div class="car-item '+(state.selectedCar===c.id?'selected':'')+'" onclick="selectCar(\''+c.id+'\')"><div class="car-info"><span class="car-icon">'+c.icon+'</span><div><div class="car-name">'+c.name+'</div><div class="car-plate">'+c.plate+'</div></div></div>'+(state.isAdmin?'<button class="delete-car" onclick="event.stopPropagation();deleteCar(\''+c.id+'\')">✕</button>':'')+'</div>').join('');
+            document.getElementById('add-car-form').style.display = state.isAdmin?'block':'none';
         }
 
-        // Select car
-        function selectCar(carId) {
-            state.selectedCar = carId;
-            renderCarList();
-            document.getElementById('no-car-message').style.display = 'none';
-            document.getElementById('calendar-view').style.display = 'block';
-            renderCalendar();
-        }
+        function selectCar(id) { state.selectedCar=id; renderCarList(); document.getElementById('no-car-message').style.display='none'; document.getElementById('calendar-view').style.display='block'; renderCalendar(); }
 
-        // Add car
         async function addCar() {
-            const nameInput = document.getElementById('new-car-name');
-            const plateInput = document.getElementById('new-car-plate');
-            
-            const name = nameInput.value.trim();
-            const plate = plateInput.value.trim().toUpperCase();
-
-            if (!name || !plate) {
-                showToast('Please fill all fields', 'error');
-                return;
-            }
-
-            const newCar = {
-                id: Date.now().toString(),
-                name: name,
-                plate: plate,
-                icon: CAR_ICONS[Math.floor(Math.random() * CAR_ICONS.length)]
-            };
-
-            state.cars.push(newCar);
+            const name=document.getElementById('new-car-name').value.trim(), plate=document.getElementById('new-car-plate').value.trim().toUpperCase();
+            if(!name||!plate){showToast('Please fill all fields','error');return;}
+            state.cars.push({id:Date.now().toString(),name,plate,icon:CAR_ICONS[Math.floor(Math.random()*CAR_ICONS.length)]});
             await saveData();
-            
-            nameInput.value = '';
-            plateInput.value = '';
-            
-            renderCarList();
-            showToast('Car added!', 'success');
+            document.getElementById('new-car-name').value='';document.getElementById('new-car-plate').value='';
+            renderCarList(); showToast('Car added!','success');
         }
 
-        // Delete car
-        async function deleteCar(carId) {
-            state.cars = state.cars.filter(c => c.id !== carId);
-            
-            // Remove bookings for this car
-            const newBookings = {};
-            Object.keys(state.bookings).forEach(key => {
-                if (!key.startsWith(carId + '_')) {
-                    newBookings[key] = state.bookings[key];
-                }
-            });
-            state.bookings = newBookings;
-
-            if (state.selectedCar === carId) {
-                state.selectedCar = null;
-                document.getElementById('no-car-message').style.display = 'flex';
-                document.getElementById('calendar-view').style.display = 'none';
-            }
-
-            await saveData();
-            renderCarList();
-            showToast('Car removed', 'success');
+        async function deleteCar(id) {
+            state.cars=state.cars.filter(c=>c.id!==id);
+            const nb={};Object.keys(state.bookings).forEach(k=>{if(!k.startsWith(id+'_'))nb[k]=state.bookings[k];});state.bookings=nb;
+            if(state.selectedCar===id){state.selectedCar=null;document.getElementById('no-car-message').style.display='flex';document.getElementById('calendar-view').style.display='none';}
+            await saveData(); renderCarList(); showToast('Car removed','success');
         }
 
-        // Calendar navigation
-        function prevMonth() {
-            state.currentDate = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth() - 1, 1);
-            renderCalendar();
-        }
+        function prevMonth(){state.currentDate=new Date(state.currentDate.getFullYear(),state.currentDate.getMonth()-1,1);renderCalendar();}
+        function nextMonth(){state.currentDate=new Date(state.currentDate.getFullYear(),state.currentDate.getMonth()+1,1);renderCalendar();}
+        function goToToday(){state.currentDate=new Date();renderCalendar();}
 
-        function nextMonth() {
-            state.currentDate = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth() + 1, 1);
-            renderCalendar();
-        }
-
-        function goToToday() {
-            state.currentDate = new Date();
-            renderCalendar();
-        }
-
-        // Render calendar
         function renderCalendar() {
-            if (!state.selectedCar) return;
-
-            const year = state.currentDate.getFullYear();
-            const month = state.currentDate.getMonth();
-            
-            document.getElementById('current-month').textContent = 
-                `${MONTH_NAMES[month]} ${year}`;
-
-            const firstDay = new Date(year, month, 1);
-            const startDate = new Date(firstDay);
-            startDate.setDate(startDate.getDate() - firstDay.getDay());
-
-            const today = new Date();
-            const container = document.getElementById('calendar-days');
-            let html = '';
-
-            for (let i = 0; i < 42; i++) {
-                const day = new Date(startDate);
-                day.setDate(startDate.getDate() + i);
-                
-                const isCurrentMonth = day.getMonth() === month;
-                const isToday = day.toDateString() === today.toDateString();
-                const dateKey = formatDateKey(day);
-                
-                const morningKey = `${state.selectedCar}_${dateKey}_morning`;
-                const eveningKey = `${state.selectedCar}_${dateKey}_evening`;
-                const morningBooking = state.bookings[morningKey];
-                const eveningBooking = state.bookings[eveningKey];
-
-                html += `
-                    <div class="calendar-day ${!isCurrentMonth ? 'other-month' : ''} ${isToday ? 'today' : ''}">
-                        <div class="day-number">
-                            <span>${day.getDate()}</span>
-                        </div>
-                        <div class="booking-slots">
-                            <div class="booking-slot morning ${morningBooking ? 'booked' : 'available'} ${morningBooking && state.isAdmin ? 'admin-view' : ''}"
-                                 onclick="handleSlotClick('${dateKey}', 'morning')"
-                                 title="${morningBooking ? 'Booked by ' + morningBooking.name : 'Click to book'}">
-                                <span class="slot-label">
-                                    <span>☀️</span>
-                                    <span>AM</span>
-                                </span>
-                                ${morningBooking ? `
-                                    <span class="booked-by">${morningBooking.name}</span>
-                                    ${state.isAdmin ? '<span class="remove-booking">✕</span>' : ''}
-                                ` : ''}
-                            </div>
-                            <div class="booking-slot evening ${eveningBooking ? 'booked' : 'available'} ${eveningBooking && state.isAdmin ? 'admin-view' : ''}"
-                                 onclick="handleSlotClick('${dateKey}', 'evening')"
-                                 title="${eveningBooking ? 'Booked by ' + eveningBooking.name : 'Click to book'}">
-                                <span class="slot-label">
-                                    <span>🌙</span>
-                                    <span>PM</span>
-                                </span>
-                                ${eveningBooking ? `
-                                    <span class="booked-by">${eveningBooking.name}</span>
-                                    ${state.isAdmin ? '<span class="remove-booking">✕</span>' : ''}
-                                ` : ''}
-                            </div>
-                        </div>
-                    </div>
-                `;
+            if(!state.selectedCar)return;
+            const y=state.currentDate.getFullYear(),m=state.currentDate.getMonth();
+            document.getElementById('current-month').textContent=MONTH_NAMES[m]+' '+y;
+            const fd=new Date(y,m,1),sd=new Date(fd);sd.setDate(sd.getDate()-fd.getDay());
+            const today=new Date();let html='';
+            for(let i=0;i<42;i++){
+                const d=new Date(sd);d.setDate(sd.getDate()+i);
+                const cm=d.getMonth()===m,it=d.toDateString()===today.toDateString(),dk=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+                const mb=state.bookings[state.selectedCar+'_'+dk+'_morning'],eb=state.bookings[state.selectedCar+'_'+dk+'_evening'];
+                html+='<div class="calendar-day '+(cm?'':'other-month ')+( it?'today':'')+'"><div class="day-number"><span>'+d.getDate()+'</span></div><div class="booking-slots">';
+                html+='<div class="booking-slot morning '+(mb?'booked':'available')+' '+(mb&&state.isAdmin?'admin-view':'')+'" onclick="handleSlot(\''+dk+'\',\'morning\')" title="'+(mb?'Booked by '+mb.name:'Click to book')+'"><span class="slot-label"><span>☀️</span><span>AM</span></span>'+(mb?'<span class="booked-by">'+mb.name+'</span>'+(state.isAdmin?'<span class="remove-booking">✕</span>':''):'')+'</div>';
+                html+='<div class="booking-slot evening '+(eb?'booked':'available')+' '+(eb&&state.isAdmin?'admin-view':'')+'" onclick="handleSlot(\''+dk+'\',\'evening\')" title="'+(eb?'Booked by '+eb.name:'Click to book')+'"><span class="slot-label"><span>🌙</span><span>PM</span></span>'+(eb?'<span class="booked-by">'+eb.name+'</span>'+(state.isAdmin?'<span class="remove-booking">✕</span>':''):'')+'</div>';
+                html+='</div></div>';
             }
-
-            container.innerHTML = html;
+            document.getElementById('calendar-days').innerHTML=html;
         }
 
-        // Format date key
-        function formatDateKey(date) {
-            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        async function handleSlot(dk,slot) {
+            if(!state.selectedCar)return;
+            const key=state.selectedCar+'_'+dk+'_'+slot,b=state.bookings[key];
+            if(b){if(state.isAdmin){delete state.bookings[key];await saveData();renderCalendar();showToast('Booking removed','success');}}
+            else{const[y,m,d]=dk.split('-');document.getElementById('booking-info').innerHTML='Booking for <strong>'+new Date(y,m-1,d).toDateString()+'</strong> - '+(slot==='morning'?'Morning (6AM-12PM)':'Evening (12PM-10PM)');state.pendingBooking={dk,slot};document.getElementById('booking-modal').classList.add('active');document.getElementById('booker-name').focus();}
         }
 
-        // Handle slot click
-        async function handleSlotClick(dateKey, slot) {
-            if (!state.selectedCar) return;
-
-            const bookingKey = `${state.selectedCar}_${dateKey}_${slot}`;
-            const booking = state.bookings[bookingKey];
-
-            if (booking) {
-                if (state.isAdmin) {
-                    // Admin removes booking
-                    delete state.bookings[bookingKey];
-                    await saveData();
-                    renderCalendar();
-                    showToast('Booking removed', 'success');
-                }
-            } else {
-                // Open booking modal
-                const [year, month, day] = dateKey.split('-');
-                const date = new Date(year, month - 1, day);
-                const slotText = slot === 'morning' ? 'Morning (6AM - 12PM)' : 'Evening (12PM - 10PM)';
-                
-                document.getElementById('booking-info').innerHTML = 
-                    `Booking for <strong>${date.toDateString()}</strong> - ${slotText}`;
-                
-                state.pendingBooking = { dateKey, slot };
-                document.getElementById('booking-modal').classList.add('active');
-                document.getElementById('booker-name').focus();
-            }
-        }
-
-        // Confirm booking
         async function confirmBooking() {
-            const nameInput = document.getElementById('booker-name');
-            const name = nameInput.value.trim();
-
-            if (!name) {
-                showToast('Please enter your name', 'error');
-                return;
-            }
-
-            // Refresh data first to check conflicts
-            await loadDataFromBin(state.binId);
-
-            const bookingKey = `${state.selectedCar}_${state.pendingBooking.dateKey}_${state.pendingBooking.slot}`;
-            
-            if (state.bookings[bookingKey]) {
-                showToast('This slot was just booked!', 'error');
-                closeBookingModal();
-                renderCalendar();
-                return;
-            }
-
-            state.bookings[bookingKey] = {
-                name: name,
-                bookedAt: new Date().toISOString()
-            };
-
-            await saveData();
-            
-            nameInput.value = '';
-            closeBookingModal();
-            renderCalendar();
-            showToast('Booking confirmed!', 'success');
+            const name=document.getElementById('booker-name').value.trim();
+            if(!name){showToast('Please enter your name','error');return;}
+            try{await loadDataFromBin();}catch(e){}
+            const key=state.selectedCar+'_'+state.pendingBooking.dk+'_'+state.pendingBooking.slot;
+            if(state.bookings[key]){showToast('Slot just booked by someone else!','error');closeBookingModal();renderCalendar();return;}
+            state.bookings[key]={name,bookedAt:new Date().toISOString()};
+            await saveData();document.getElementById('booker-name').value='';closeBookingModal();renderCalendar();showToast('Booking confirmed!','success');
         }
 
-        // Close booking modal
-        function closeBookingModal() {
-            document.getElementById('booking-modal').classList.remove('active');
-            document.getElementById('booker-name').value = '';
-            state.pendingBooking = null;
-        }
+        function closeBookingModal(){document.getElementById('booking-modal').classList.remove('active');document.getElementById('booker-name').value='';state.pendingBooking=null;}
+        function handleAdminToggle(){if(state.isAdmin){state.isAdmin=false;updateAdminUI();showToast('Admin mode disabled','success');}else{document.getElementById('admin-modal').classList.add('active');document.getElementById('admin-code').focus();}}
+        function verifyAdminCode(){if(document.getElementById('admin-code').value===ADMIN_CODE){state.isAdmin=true;closeAdminModal();updateAdminUI();showToast('Admin mode enabled','success');}else{showToast('Invalid code','error');}}
+        function closeAdminModal(){document.getElementById('admin-modal').classList.remove('active');document.getElementById('admin-code').value='';}
+        function updateAdminUI(){const t=document.getElementById('admin-toggle'),i=document.getElementById('admin-icon');if(state.isAdmin){t.classList.add('active');i.textContent='🔓';}else{t.classList.remove('active');i.textContent='🔒';}renderCarList();renderCalendar();}
 
-        // Admin toggle
-        function handleAdminToggle() {
-            if (state.isAdmin) {
-                state.isAdmin = false;
-                updateAdminUI();
-                showToast('Admin mode disabled', 'success');
-            } else {
-                document.getElementById('admin-modal').classList.add('active');
-                document.getElementById('admin-code').focus();
-            }
-        }
-
-        // Verify admin code
-        function verifyAdminCode() {
-            const code = document.getElementById('admin-code').value;
-            
-            if (code === ADMIN_CODE) {
-                state.isAdmin = true;
-                closeAdminModal();
-                updateAdminUI();
-                showToast('Admin mode enabled', 'success');
-            } else {
-                showToast('Invalid code', 'error');
-            }
-        }
-
-        // Close admin modal
-        function closeAdminModal() {
-            document.getElementById('admin-modal').classList.remove('active');
-            document.getElementById('admin-code').value = '';
-        }
-
-        // Update admin UI
-        function updateAdminUI() {
-            const toggle = document.getElementById('admin-toggle');
-            const icon = document.getElementById('admin-icon');
-            
-            if (state.isAdmin) {
-                toggle.classList.add('active');
-                icon.textContent = '🔓';
-            } else {
-                toggle.classList.remove('active');
-                icon.textContent = '🔒';
-            }
-            
-            renderCarList();
-            renderCalendar();
-        }
-
-        // Keyboard events
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                if (document.getElementById('admin-modal').classList.contains('active')) {
-                    verifyAdminCode();
-                } else if (document.getElementById('booking-modal').classList.contains('active')) {
-                    confirmBooking();
-                }
-            }
-            if (e.key === 'Escape') {
-                closeAdminModal();
-                closeBookingModal();
-            }
-        });
-
-        // Check if already configured
-        window.onload = function() {
-            if (state.apiKey && state.binId) {
-                // Already configured, try to load
-                document.getElementById('setup-screen').style.display = 'none';
-                document.getElementById('app-container').classList.add('active');
-                document.getElementById('loading').style.display = 'flex';
-                
-                loadDataFromBin(state.binId)
-                    .then(() => {
-                        document.getElementById('loading').style.display = 'none';
-                        renderCarList();
-                        renderCalendar();
-                    })
-                    .catch((error) => {
-                        console.error('Load error:', error);
-                        document.getElementById('loading').style.display = 'none';
-                        // Show setup screen again
-                        document.getElementById('setup-screen').style.display = 'flex';
-                        document.getElementById('app-container').classList.remove('active');
-                        document.getElementById('api-key-input').value = state.apiKey;
-                        showSetupError('Failed to load data. Please check your API key.');
-                    });
-            }
-        };
+        document.addEventListener('keydown',e=>{if(e.key==='Enter'){if(document.getElementById('admin-modal').classList.contains('active'))verifyAdminCode();else if(document.getElementById('booking-modal').classList.contains('active'))confirmBooking();}if(e.key==='Escape'){closeAdminModal();closeBookingModal();}});
+        window.onload=init;
     </script>
 </body>
 </html>
