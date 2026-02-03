@@ -20,9 +20,6 @@
             --text-secondary: #94a3b8;
             --text-muted: #64748b;
             --border-color: #2a2a38;
-            --morning-gradient: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-            --evening-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            --booked-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
         }
 
         * {
@@ -39,7 +36,6 @@
             overflow-x: hidden;
         }
 
-        /* Background Pattern */
         body::before {
             content: '';
             position: fixed;
@@ -52,6 +48,158 @@
                 radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
+        }
+
+        /* Setup Screen */
+        .setup-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .setup-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .setup-card h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .setup-card .subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .setup-steps {
+            margin-bottom: 2rem;
+        }
+
+        .setup-step {
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .setup-step h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .setup-step h3 .step-num {
+            background: var(--accent-blue);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        .setup-step p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-left: 2rem;
+        }
+
+        .setup-step a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .setup-step a:hover {
+            text-decoration: underline;
+        }
+
+        .setup-step code {
+            background: var(--bg-primary);
+            padding: 0.125rem 0.375rem;
+            border-radius: 4px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        .api-input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .api-input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .api-input-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .api-input-group input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .api-input-group .hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .setup-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .setup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .setup-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-msg {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
         }
 
         /* Header */
@@ -102,6 +250,39 @@
             gap: 1rem;
         }
 
+        .sync-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .sync-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--text-primary);
+        }
+
+        .sync-btn.syncing {
+            pointer-events: none;
+        }
+
+        .sync-btn.syncing .sync-icon {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         .admin-toggle {
             display: flex;
             align-items: center;
@@ -123,7 +304,7 @@
             border-color: var(--accent-purple);
         }
 
-        .admin-toggle .toggle-switch {
+        .toggle-switch {
             width: 36px;
             height: 20px;
             background: var(--bg-primary);
@@ -136,7 +317,7 @@
             background: var(--accent-purple);
         }
 
-        .admin-toggle .toggle-switch::after {
+        .toggle-switch::after {
             content: '';
             position: absolute;
             width: 16px;
@@ -158,6 +339,14 @@
             min-height: calc(100vh - 70px);
         }
 
+        .app-container {
+            display: none;
+        }
+
+        .app-container.active {
+            display: block;
+        }
+
         /* Sidebar */
         .sidebar {
             width: 280px;
@@ -165,10 +354,6 @@
             border-right: 1px solid var(--border-color);
             padding: 1.5rem;
             overflow-y: auto;
-        }
-
-        .sidebar-section {
-            margin-bottom: 2rem;
         }
 
         .sidebar-title {
@@ -239,16 +424,13 @@
             opacity: 0;
             transition: opacity 0.2s;
             padding: 0.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 1rem;
         }
 
         .car-item:hover .delete-car {
             opacity: 1;
         }
 
-        /* Add Car Form */
         .add-car-form {
             margin-top: 1rem;
             padding: 1rem;
@@ -313,11 +495,6 @@
             border: 1px solid var(--border-color);
         }
 
-        .btn-danger {
-            background: var(--accent-red);
-            color: white;
-        }
-
         .btn-sm {
             padding: 0.375rem 0.75rem;
             font-size: 0.875rem;
@@ -335,6 +512,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .calendar-nav {
@@ -366,6 +545,8 @@
             font-family: 'Space Mono', monospace;
             font-size: 1.5rem;
             font-weight: 700;
+            min-width: 220px;
+            text-align: center;
         }
 
         .today-btn {
@@ -383,11 +564,11 @@
             background: var(--bg-hover);
         }
 
-        /* Legend */
         .legend {
             display: flex;
             gap: 1.5rem;
             margin-bottom: 1.5rem;
+            flex-wrap: wrap;
         }
 
         .legend-item {
@@ -405,18 +586,17 @@
         }
 
         .legend-dot.morning {
-            background: var(--morning-gradient);
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
         }
 
         .legend-dot.evening {
-            background: var(--evening-gradient);
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
         }
 
         .legend-dot.booked {
-            background: var(--booked-gradient);
+            background: linear-gradient(135deg, #ef4444, #dc2626);
         }
 
-        /* Calendar Grid */
         .calendar-grid {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -476,12 +656,9 @@
             font-family: 'Space Mono', monospace;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
         }
 
-        .calendar-day.today .day-number span:first-child {
+        .calendar-day.today .day-number span {
             background: var(--accent-blue);
             color: white;
             padding: 0.25rem 0.5rem;
@@ -507,12 +684,12 @@
         }
 
         .booking-slot.morning {
-            background: var(--morning-gradient);
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
             color: #1a1a24;
         }
 
         .booking-slot.evening {
-            background: var(--evening-gradient);
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
             color: white;
         }
 
@@ -522,7 +699,7 @@
         }
 
         .booking-slot.booked {
-            background: var(--booked-gradient);
+            background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
             cursor: default;
         }
@@ -590,6 +767,7 @@
             padding: 2rem;
             width: 100%;
             max-width: 400px;
+            margin: 1rem;
             transform: translateY(20px);
             transition: transform 0.3s;
         }
@@ -617,7 +795,7 @@
             flex: 1;
         }
 
-        /* Toast Notification */
+        /* Toast */
         .toast {
             position: fixed;
             bottom: 2rem;
@@ -655,6 +833,7 @@
             align-items: center;
             justify-content: center;
             height: 100%;
+            min-height: 400px;
             text-align: center;
             color: var(--text-muted);
         }
@@ -669,6 +848,27 @@
             font-size: 1.5rem;
             margin-bottom: 0.5rem;
             color: var(--text-secondary);
+        }
+
+        /* Loading */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .loading-overlay .spinner {
+            font-size: 4rem;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
         }
 
         /* Responsive */
@@ -695,531 +895,721 @@
                 font-size: 0.6rem;
                 padding: 0.25rem;
             }
+
+            .header {
+                padding: 1rem;
+            }
+
+            .header-actions {
+                gap: 0.5rem;
+            }
+
+            .sync-btn span:not(.sync-icon) {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="app"></div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
-
-    <script type="text/babel">
-        const { useState, useEffect, useCallback } = React;
-
-        // Storage Key
-        const STORAGE_KEY = 'fleet_reserve_data';
-
-        // Initial Data
-        const getInitialData = () => {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) {
-                return JSON.parse(saved);
-            }
-            return {
-                cars: [
-                    { id: '1', name: 'Toyota Camry', plate: 'ABC-1234', icon: '🚗' },
-                    { id: '2', name: 'Honda CR-V', plate: 'XYZ-5678', icon: '🚙' },
-                    { id: '3', name: 'Ford Transit', plate: 'DEF-9012', icon: '🚐' }
-                ],
-                bookings: {}
-            };
-        };
-
-        // Icons
-        const Icons = {
-            car: '🚗',
-            calendar: '📅',
-            sun: '☀️',
-            moon: '🌙',
-            plus: '+',
-            trash: '✕',
-            check: '✓',
-            chevronLeft: '◀',
-            chevronRight: '▶',
-            lock: '🔒',
-            unlock: '🔓'
-        };
-
-        // Toast Component
-        const Toast = ({ message, type, visible }) => (
-            <div className={`toast ${type} ${visible ? 'active' : ''}`}>
-                <span>{type === 'success' ? Icons.check : '!'}</span>
-                <span>{message}</span>
-            </div>
-        );
-
-        // Modal Component
-        const Modal = ({ isOpen, onClose, title, children }) => (
-            <div className={`modal-overlay ${isOpen ? 'active' : ''}`} onClick={onClose}>
-                <div className="modal" onClick={e => e.stopPropagation()}>
-                    <h3 className="modal-title">{title}</h3>
-                    {children}
+    <!-- Setup Screen -->
+    <div id="setup-screen" class="setup-screen">
+        <div class="setup-card">
+            <h1>🚗 Fleet Reserve Setup</h1>
+            <p class="subtitle">One-time setup to enable cloud storage for shared bookings</p>
+            
+            <div class="setup-steps">
+                <div class="setup-step">
+                    <h3><span class="step-num">1</span> Create JSONBin Account</h3>
+                    <p>Go to <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> and sign up for a free account</p>
+                </div>
+                <div class="setup-step">
+                    <h3><span class="step-num">2</span> Get Your API Key</h3>
+                    <p>After login, go to <strong>API Keys</strong> tab and copy your <code>X-Master-Key</code></p>
+                </div>
+                <div class="setup-step">
+                    <h3><span class="step-num">3</span> Enter API Key Below</h3>
+                    <p>Paste your API key to connect to cloud storage</p>
                 </div>
             </div>
-        );
 
-        // Main App
-        const App = () => {
-            const [data, setData] = useState(getInitialData);
-            const [selectedCar, setSelectedCar] = useState(null);
-            const [currentDate, setCurrentDate] = useState(new Date());
-            const [isAdmin, setIsAdmin] = useState(false);
-            const [showAdminModal, setShowAdminModal] = useState(false);
-            const [showBookingModal, setShowBookingModal] = useState(false);
-            const [adminCode, setAdminCode] = useState('');
-            const [bookingDetails, setBookingDetails] = useState(null);
-            const [bookerName, setBookerName] = useState('');
-            const [newCar, setNewCar] = useState({ name: '', plate: '' });
-            const [toast, setToast] = useState({ visible: false, message: '', type: 'success' });
+            <div id="setup-error" class="error-msg" style="display: none;"></div>
 
-            // Save data to localStorage
-            useEffect(() => {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-            }, [data]);
+            <div class="api-input-group">
+                <label>JSONBin API Key (X-Master-Key)</label>
+                <input type="text" id="api-key-input" placeholder="$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+                <p class="hint">Your API key is stored locally in your browser and never shared</p>
+            </div>
 
-            // Show toast
-            const showToast = (message, type = 'success') => {
-                setToast({ visible: true, message, type });
-                setTimeout(() => setToast(prev => ({ ...prev, visible: false })), 3000);
-            };
+            <button id="setup-btn" class="setup-btn" onclick="initializeApp()">
+                Connect & Start
+            </button>
+        </div>
+    </div>
 
-            // Toggle admin mode
-            const handleAdminToggle = () => {
-                if (isAdmin) {
-                    setIsAdmin(false);
-                    showToast('Admin mode disabled');
-                } else {
-                    setShowAdminModal(true);
-                }
-            };
+    <!-- Main App -->
+    <div id="app-container" class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">🚗</div>
+                <div class="logo-text">Fleet<span>Reserve</span></div>
+            </div>
+            <div class="header-actions">
+                <button class="sync-btn" id="sync-btn" onclick="loadData()">
+                    <span class="sync-icon">🔄</span>
+                    <span>Sync</span>
+                </button>
+                <div class="admin-toggle" id="admin-toggle" onclick="handleAdminToggle()">
+                    <span id="admin-icon">🔒</span>
+                    <span>Admin</span>
+                    <div class="toggle-switch"></div>
+                </div>
+            </div>
+        </header>
 
-            // Verify admin code
-            const verifyAdminCode = () => {
-                if (adminCode === '1234') {
-                    setIsAdmin(true);
-                    setShowAdminModal(false);
-                    setAdminCode('');
-                    showToast('Admin mode enabled');
-                } else {
-                    showToast('Invalid code', 'error');
-                }
-            };
-
-            // Add car
-            const addCar = () => {
-                if (!newCar.name || !newCar.plate) {
-                    showToast('Please fill all fields', 'error');
-                    return;
-                }
-                const carIcons = ['🚗', '🚙', '🚐', '🚕', '🚘', '🏎️'];
-                const newCarData = {
-                    id: Date.now().toString(),
-                    name: newCar.name,
-                    plate: newCar.plate.toUpperCase(),
-                    icon: carIcons[Math.floor(Math.random() * carIcons.length)]
-                };
-                setData(prev => ({
-                    ...prev,
-                    cars: [...prev.cars, newCarData]
-                }));
-                setNewCar({ name: '', plate: '' });
-                showToast('Car added successfully');
-            };
-
-            // Delete car
-            const deleteCar = (carId) => {
-                setData(prev => ({
-                    ...prev,
-                    cars: prev.cars.filter(c => c.id !== carId),
-                    bookings: Object.fromEntries(
-                        Object.entries(prev.bookings).filter(([key]) => !key.startsWith(carId))
-                    )
-                }));
-                if (selectedCar === carId) setSelectedCar(null);
-                showToast('Car removed');
-            };
-
-            // Get calendar days
-            const getCalendarDays = () => {
-                const year = currentDate.getFullYear();
-                const month = currentDate.getMonth();
-                const firstDay = new Date(year, month, 1);
-                const lastDay = new Date(year, month + 1, 0);
-                const startDate = new Date(firstDay);
-                startDate.setDate(startDate.getDate() - firstDay.getDay());
-                
-                const days = [];
-                const current = new Date(startDate);
-                
-                for (let i = 0; i < 42; i++) {
-                    days.push(new Date(current));
-                    current.setDate(current.getDate() + 1);
-                }
-                
-                return days;
-            };
-
-            // Format date key
-            const getDateKey = (date) => {
-                return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-            };
-
-            // Get booking for slot
-            const getBooking = (carId, date, slot) => {
-                const key = `${carId}_${getDateKey(date)}_${slot}`;
-                return data.bookings[key];
-            };
-
-            // Handle slot click
-            const handleSlotClick = (date, slot) => {
-                if (!selectedCar) return;
-                
-                const booking = getBooking(selectedCar, date, slot);
-                
-                if (booking) {
-                    if (isAdmin) {
-                        // Admin can remove booking
-                        const key = `${selectedCar}_${getDateKey(date)}_${slot}`;
-                        setData(prev => {
-                            const newBookings = { ...prev.bookings };
-                            delete newBookings[key];
-                            return { ...prev, bookings: newBookings };
-                        });
-                        showToast('Booking removed');
-                    }
-                } else {
-                    // Open booking modal
-                    setBookingDetails({ date, slot });
-                    setShowBookingModal(true);
-                }
-            };
-
-            // Confirm booking
-            const confirmBooking = () => {
-                if (!bookerName.trim()) {
-                    showToast('Please enter your name', 'error');
-                    return;
-                }
-                
-                const key = `${selectedCar}_${getDateKey(bookingDetails.date)}_${bookingDetails.slot}`;
-                setData(prev => ({
-                    ...prev,
-                    bookings: {
-                        ...prev.bookings,
-                        [key]: { name: bookerName.trim(), bookedAt: new Date().toISOString() }
-                    }
-                }));
-                
-                setShowBookingModal(false);
-                setBookerName('');
-                setBookingDetails(null);
-                showToast('Booking confirmed!');
-            };
-
-            // Navigate months
-            const prevMonth = () => {
-                setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
-            };
-
-            const nextMonth = () => {
-                setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
-            };
-
-            const goToToday = () => {
-                setCurrentDate(new Date());
-            };
-
-            // Check if date is today
-            const isToday = (date) => {
-                const today = new Date();
-                return date.getDate() === today.getDate() &&
-                       date.getMonth() === today.getMonth() &&
-                       date.getFullYear() === today.getFullYear();
-            };
-
-            // Check if date is in current month
-            const isCurrentMonth = (date) => {
-                return date.getMonth() === currentDate.getMonth();
-            };
-
-            const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                               'July', 'August', 'September', 'October', 'November', 'December'];
-
-            return (
-                <>
-                    {/* Header */}
-                    <header className="header">
-                        <div className="logo">
-                            <div className="logo-icon">{Icons.car}</div>
-                            <div className="logo-text">Fleet<span>Reserve</span></div>
-                        </div>
-                        <div className="header-actions">
-                            <div 
-                                className={`admin-toggle ${isAdmin ? 'active' : ''}`}
-                                onClick={handleAdminToggle}
-                            >
-                                <span>{isAdmin ? Icons.unlock : Icons.lock}</span>
-                                <span>Admin</span>
-                                <div className="toggle-switch"></div>
-                            </div>
-                        </div>
-                    </header>
-
-                    <div className="main-container">
-                        {/* Sidebar */}
-                        <aside className="sidebar">
-                            <div className="sidebar-section">
-                                <div className="sidebar-title">
-                                    <span>{Icons.car}</span>
-                                    <span>Fleet Vehicles</span>
-                                </div>
-                                <div className="car-list">
-                                    {data.cars.map(car => (
-                                        <div 
-                                            key={car.id}
-                                            className={`car-item ${selectedCar === car.id ? 'selected' : ''}`}
-                                            onClick={() => setSelectedCar(car.id)}
-                                        >
-                                            <div className="car-info">
-                                                <span className="car-icon">{car.icon}</span>
-                                                <div>
-                                                    <div className="car-name">{car.name}</div>
-                                                    <div className="car-plate">{car.plate}</div>
-                                                </div>
-                                            </div>
-                                            {isAdmin && (
-                                                <button 
-                                                    className="delete-car"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        deleteCar(car.id);
-                                                    }}
-                                                >
-                                                    {Icons.trash}
-                                                </button>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* Add Car Form (Admin Only) */}
-                                {isAdmin && (
-                                    <div className="add-car-form">
-                                        <div className="form-group">
-                                            <label>Car Name</label>
-                                            <input
-                                                type="text"
-                                                placeholder="e.g., Toyota Corolla"
-                                                value={newCar.name}
-                                                onChange={e => setNewCar(prev => ({ ...prev, name: e.target.value }))}
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>License Plate</label>
-                                            <input
-                                                type="text"
-                                                placeholder="e.g., ABC-1234"
-                                                value={newCar.plate}
-                                                onChange={e => setNewCar(prev => ({ ...prev, plate: e.target.value }))}
-                                            />
-                                        </div>
-                                        <button className="btn btn-primary btn-sm" onClick={addCar}>
-                                            <span>{Icons.plus}</span>
-                                            <span>Add Vehicle</span>
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        </aside>
-
-                        {/* Calendar Container */}
-                        <main className="calendar-container">
-                            {selectedCar ? (
-                                <>
-                                    <div className="calendar-header">
-                                        <div className="calendar-nav">
-                                            <button className="nav-btn" onClick={prevMonth}>
-                                                {Icons.chevronLeft}
-                                            </button>
-                                            <h2 className="current-month">
-                                                {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
-                                            </h2>
-                                            <button className="nav-btn" onClick={nextMonth}>
-                                                {Icons.chevronRight}
-                                            </button>
-                                        </div>
-                                        <button className="today-btn" onClick={goToToday}>Today</button>
-                                    </div>
-
-                                    <div className="legend">
-                                        <div className="legend-item">
-                                            <div className="legend-dot morning"></div>
-                                            <span>Morning (6AM - 12PM)</span>
-                                        </div>
-                                        <div className="legend-item">
-                                            <div className="legend-dot evening"></div>
-                                            <span>Evening (12PM - 10PM)</span>
-                                        </div>
-                                        <div className="legend-item">
-                                            <div className="legend-dot booked"></div>
-                                            <span>Booked</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="calendar-grid">
-                                        <div className="calendar-weekdays">
-                                            {weekdays.map(day => (
-                                                <div key={day} className="weekday">{day}</div>
-                                            ))}
-                                        </div>
-                                        <div className="calendar-days">
-                                            {getCalendarDays().map((day, index) => {
-                                                const morningBooking = getBooking(selectedCar, day, 'morning');
-                                                const eveningBooking = getBooking(selectedCar, day, 'evening');
-                                                
-                                                return (
-                                                    <div 
-                                                        key={index}
-                                                        className={`calendar-day ${!isCurrentMonth(day) ? 'other-month' : ''} ${isToday(day) ? 'today' : ''}`}
-                                                    >
-                                                        <div className="day-number">
-                                                            <span>{day.getDate()}</span>
-                                                        </div>
-                                                        <div className="booking-slots">
-                                                            <div 
-                                                                className={`booking-slot morning ${morningBooking ? 'booked' : 'available'} ${morningBooking && isAdmin ? 'admin-view' : ''}`}
-                                                                onClick={() => handleSlotClick(day, 'morning')}
-                                                                title={morningBooking ? `Booked by ${morningBooking.name}` : 'Click to book'}
-                                                            >
-                                                                <span className="slot-label">
-                                                                    <span>{Icons.sun}</span>
-                                                                    <span>AM</span>
-                                                                </span>
-                                                                {morningBooking && (
-                                                                    <>
-                                                                        <span className="booked-by">{morningBooking.name}</span>
-                                                                        {isAdmin && <span className="remove-booking">{Icons.trash}</span>}
-                                                                    </>
-                                                                )}
-                                                            </div>
-                                                            <div 
-                                                                className={`booking-slot evening ${eveningBooking ? 'booked' : 'available'} ${eveningBooking && isAdmin ? 'admin-view' : ''}`}
-                                                                onClick={() => handleSlotClick(day, 'evening')}
-                                                                title={eveningBooking ? `Booked by ${eveningBooking.name}` : 'Click to book'}
-                                                            >
-                                                                <span className="slot-label">
-                                                                    <span>{Icons.moon}</span>
-                                                                    <span>PM</span>
-                                                                </span>
-                                                                {eveningBooking && (
-                                                                    <>
-                                                                        <span className="booked-by">{eveningBooking.name}</span>
-                                                                        {isAdmin && <span className="remove-booking">{Icons.trash}</span>}
-                                                                    </>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                </>
-                            ) : (
-                                <div className="no-car-selected">
-                                    <div className="icon">{Icons.car}</div>
-                                    <h2>Select a Vehicle</h2>
-                                    <p>Choose a car from the sidebar to view and manage bookings</p>
-                                </div>
-                            )}
-                        </main>
+        <div class="main-container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-title">
+                    <span>🚗</span>
+                    <span>Fleet Vehicles</span>
+                </div>
+                <div class="car-list" id="car-list"></div>
+                <div class="add-car-form" id="add-car-form" style="display: none;">
+                    <div class="form-group">
+                        <label>Car Name</label>
+                        <input type="text" id="new-car-name" placeholder="e.g., Toyota Corolla">
                     </div>
+                    <div class="form-group">
+                        <label>License Plate</label>
+                        <input type="text" id="new-car-plate" placeholder="e.g., ABC-1234">
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="addCar()">
+                        <span>+</span>
+                        <span>Add Vehicle</span>
+                    </button>
+                </div>
+            </aside>
 
-                    {/* Admin Code Modal */}
-                    <Modal 
-                        isOpen={showAdminModal} 
-                        onClose={() => {
-                            setShowAdminModal(false);
-                            setAdminCode('');
-                        }}
-                        title={<><span>{Icons.lock}</span> Admin Authentication</>}
-                    >
-                        <div className="form-group">
-                            <label>Enter Admin Code</label>
-                            <input
-                                type="password"
-                                placeholder="Enter code..."
-                                value={adminCode}
-                                onChange={e => setAdminCode(e.target.value)}
-                                onKeyPress={e => e.key === 'Enter' && verifyAdminCode()}
-                                autoFocus
-                            />
+            <!-- Calendar -->
+            <main class="calendar-container" id="calendar-container">
+                <div class="no-car-selected" id="no-car-message">
+                    <div class="icon">🚗</div>
+                    <h2>Select a Vehicle</h2>
+                    <p>Choose a car from the sidebar to view and manage bookings</p>
+                </div>
+                <div id="calendar-view" style="display: none;">
+                    <div class="calendar-header">
+                        <div class="calendar-nav">
+                            <button class="nav-btn" onclick="prevMonth()">◀</button>
+                            <h2 class="current-month" id="current-month"></h2>
+                            <button class="nav-btn" onclick="nextMonth()">▶</button>
                         </div>
-                        <div className="modal-actions">
-                            <button className="btn btn-secondary" onClick={() => {
-                                setShowAdminModal(false);
-                                setAdminCode('');
-                            }}>
-                                Cancel
-                            </button>
-                            <button className="btn btn-primary" onClick={verifyAdminCode}>
-                                Verify
-                            </button>
+                        <button class="today-btn" onclick="goToToday()">Today</button>
+                    </div>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-dot morning"></div>
+                            <span>Morning (6AM - 12PM)</span>
                         </div>
-                    </Modal>
+                        <div class="legend-item">
+                            <div class="legend-dot evening"></div>
+                            <span>Evening (12PM - 10PM)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot booked"></div>
+                            <span>Booked</span>
+                        </div>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="calendar-weekdays">
+                            <div class="weekday">Sun</div>
+                            <div class="weekday">Mon</div>
+                            <div class="weekday">Tue</div>
+                            <div class="weekday">Wed</div>
+                            <div class="weekday">Thu</div>
+                            <div class="weekday">Fri</div>
+                            <div class="weekday">Sat</div>
+                        </div>
+                        <div class="calendar-days" id="calendar-days"></div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
 
-                    {/* Booking Modal */}
-                    <Modal 
-                        isOpen={showBookingModal} 
-                        onClose={() => {
-                            setShowBookingModal(false);
-                            setBookerName('');
-                            setBookingDetails(null);
-                        }}
-                        title={<><span>{Icons.calendar}</span> Book Vehicle</>}
-                    >
-                        {bookingDetails && (
-                            <>
-                                <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>
-                                    Booking for <strong>{bookingDetails.date.toDateString()}</strong> - {bookingDetails.slot === 'morning' ? 'Morning (6AM - 12PM)' : 'Evening (12PM - 10PM)'}
-                                </p>
-                                <div className="form-group">
-                                    <label>Your Name</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Enter your name..."
-                                        value={bookerName}
-                                        onChange={e => setBookerName(e.target.value)}
-                                        onKeyPress={e => e.key === 'Enter' && confirmBooking()}
-                                        autoFocus
-                                    />
-                                </div>
-                                <div className="modal-actions">
-                                    <button className="btn btn-secondary" onClick={() => {
-                                        setShowBookingModal(false);
-                                        setBookerName('');
-                                        setBookingDetails(null);
-                                    }}>
-                                        Cancel
-                                    </button>
-                                    <button className="btn btn-primary" onClick={confirmBooking}>
-                                        Confirm Booking
-                                    </button>
-                                </div>
-                            </>
-                        )}
-                    </Modal>
+    <!-- Admin Modal -->
+    <div class="modal-overlay" id="admin-modal">
+        <div class="modal">
+            <h3 class="modal-title">🔒 Admin Authentication</h3>
+            <div class="form-group">
+                <label>Enter Admin Code</label>
+                <input type="password" id="admin-code" placeholder="Enter code...">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeAdminModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="verifyAdminCode()">Verify</button>
+            </div>
+        </div>
+    </div>
 
-                    {/* Toast */}
-                    <Toast {...toast} />
-                </>
-            );
+    <!-- Booking Modal -->
+    <div class="modal-overlay" id="booking-modal">
+        <div class="modal">
+            <h3 class="modal-title">📅 Book Vehicle</h3>
+            <p id="booking-info" style="color: var(--text-secondary); margin-bottom: 1rem;"></p>
+            <div class="form-group">
+                <label>Your Name</label>
+                <input type="text" id="booker-name" placeholder="Enter your name...">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeBookingModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmBooking()">Confirm Booking</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span id="toast-icon">✓</span>
+        <span id="toast-message"></span>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-overlay" id="loading" style="display: none;">
+        <div class="spinner">🚗</div>
+        <p>Loading...</p>
+    </div>
+
+    <script>
+        // Configuration
+        const JSONBIN_API = 'https://api.jsonbin.io/v3';
+        const ADMIN_CODE = '1234';
+        const CAR_ICONS = ['🚗', '🚙', '🚐', '🚕', '🚘', '🏎️'];
+        const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June',
+                            'July', 'August', 'September', 'October', 'November', 'December'];
+
+        // State
+        let state = {
+            apiKey: localStorage.getItem('fleet_api_key') || '',
+            binId: localStorage.getItem('fleet_bin_id') || '',
+            cars: [],
+            bookings: {},
+            selectedCar: null,
+            currentDate: new Date(),
+            isAdmin: false,
+            pendingBooking: null
         };
 
-        ReactDOM.render(<App />, document.getElementById('app'));
+        // Default data
+        const DEFAULT_DATA = {
+            cars: [
+                { id: '1', name: 'Toyota Camry', plate: 'ABC-1234', icon: '🚗' },
+                { id: '2', name: 'Honda CR-V', plate: 'XYZ-5678', icon: '🚙' },
+                { id: '3', name: 'Ford Transit', plate: 'DEF-9012', icon: '🚐' }
+            ],
+            bookings: {}
+        };
+
+        // Initialize app
+        async function initializeApp() {
+            const apiKeyInput = document.getElementById('api-key-input');
+            const apiKey = apiKeyInput.value.trim();
+            
+            if (!apiKey) {
+                showSetupError('Please enter your API key');
+                return;
+            }
+
+            document.getElementById('setup-btn').disabled = true;
+            document.getElementById('setup-btn').textContent = 'Connecting...';
+
+            try {
+                // Store API key
+                localStorage.setItem('fleet_api_key', apiKey);
+                state.apiKey = apiKey;
+
+                // Check if we have an existing bin
+                let binId = localStorage.getItem('fleet_bin_id');
+                
+                if (binId) {
+                    // Try to load existing bin
+                    try {
+                        await loadDataFromBin(binId);
+                    } catch (e) {
+                        // Bin doesn't exist or error, create new one
+                        binId = await createNewBin();
+                    }
+                } else {
+                    // Create new bin
+                    binId = await createNewBin();
+                }
+
+                // Show main app
+                document.getElementById('setup-screen').style.display = 'none';
+                document.getElementById('app-container').classList.add('active');
+                
+                renderCarList();
+                renderCalendar();
+
+            } catch (error) {
+                console.error('Init error:', error);
+                showSetupError('Failed to connect. Please check your API key.');
+                document.getElementById('setup-btn').disabled = false;
+                document.getElementById('setup-btn').textContent = 'Connect & Start';
+            }
+        }
+
+        // Create new JSONBin
+        async function createNewBin() {
+            const response = await fetch(`${JSONBIN_API}/b`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': state.apiKey,
+                    'X-Bin-Name': 'fleet-reserve-data'
+                },
+                body: JSON.stringify(DEFAULT_DATA)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to create bin');
+            }
+
+            const data = await response.json();
+            const binId = data.metadata.id;
+            
+            localStorage.setItem('fleet_bin_id', binId);
+            state.binId = binId;
+            state.cars = DEFAULT_DATA.cars;
+            state.bookings = DEFAULT_DATA.bookings;
+
+            return binId;
+        }
+
+        // Load data from bin
+        async function loadDataFromBin(binId) {
+            const response = await fetch(`${JSONBIN_API}/b/${binId}/latest`, {
+                headers: {
+                    'X-Master-Key': state.apiKey
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to load bin');
+            }
+
+            const data = await response.json();
+            state.binId = binId;
+            state.cars = data.record.cars || [];
+            state.bookings = data.record.bookings || {};
+        }
+
+        // Save data to bin
+        async function saveData() {
+            if (!state.binId || !state.apiKey) return;
+
+            try {
+                const response = await fetch(`${JSONBIN_API}/b/${state.binId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': state.apiKey
+                    },
+                    body: JSON.stringify({
+                        cars: state.cars,
+                        bookings: state.bookings
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to save');
+                }
+            } catch (error) {
+                console.error('Save error:', error);
+                showToast('Failed to save changes', 'error');
+            }
+        }
+
+        // Load/refresh data
+        async function loadData() {
+            if (!state.binId || !state.apiKey) return;
+
+            const syncBtn = document.getElementById('sync-btn');
+            syncBtn.classList.add('syncing');
+
+            try {
+                await loadDataFromBin(state.binId);
+                renderCarList();
+                renderCalendar();
+                showToast('Data synced!', 'success');
+            } catch (error) {
+                console.error('Load error:', error);
+                showToast('Failed to sync', 'error');
+            } finally {
+                syncBtn.classList.remove('syncing');
+            }
+        }
+
+        // Show setup error
+        function showSetupError(msg) {
+            const errorEl = document.getElementById('setup-error');
+            errorEl.textContent = msg;
+            errorEl.style.display = 'block';
+        }
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toast-icon');
+            const msg = document.getElementById('toast-message');
+            
+            icon.textContent = type === 'success' ? '✓' : '!';
+            msg.textContent = message;
+            toast.className = `toast active ${type}`;
+            
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+
+        // Render car list
+        function renderCarList() {
+            const container = document.getElementById('car-list');
+            container.innerHTML = state.cars.map(car => `
+                <div class="car-item ${state.selectedCar === car.id ? 'selected' : ''}" 
+                     onclick="selectCar('${car.id}')">
+                    <div class="car-info">
+                        <span class="car-icon">${car.icon}</span>
+                        <div>
+                            <div class="car-name">${car.name}</div>
+                            <div class="car-plate">${car.plate}</div>
+                        </div>
+                    </div>
+                    ${state.isAdmin ? `
+                        <button class="delete-car" onclick="event.stopPropagation(); deleteCar('${car.id}')">✕</button>
+                    ` : ''}
+                </div>
+            `).join('');
+
+            // Show/hide add car form
+            document.getElementById('add-car-form').style.display = state.isAdmin ? 'block' : 'none';
+        }
+
+        // Select car
+        function selectCar(carId) {
+            state.selectedCar = carId;
+            renderCarList();
+            document.getElementById('no-car-message').style.display = 'none';
+            document.getElementById('calendar-view').style.display = 'block';
+            renderCalendar();
+        }
+
+        // Add car
+        async function addCar() {
+            const nameInput = document.getElementById('new-car-name');
+            const plateInput = document.getElementById('new-car-plate');
+            
+            const name = nameInput.value.trim();
+            const plate = plateInput.value.trim().toUpperCase();
+
+            if (!name || !plate) {
+                showToast('Please fill all fields', 'error');
+                return;
+            }
+
+            const newCar = {
+                id: Date.now().toString(),
+                name: name,
+                plate: plate,
+                icon: CAR_ICONS[Math.floor(Math.random() * CAR_ICONS.length)]
+            };
+
+            state.cars.push(newCar);
+            await saveData();
+            
+            nameInput.value = '';
+            plateInput.value = '';
+            
+            renderCarList();
+            showToast('Car added!', 'success');
+        }
+
+        // Delete car
+        async function deleteCar(carId) {
+            state.cars = state.cars.filter(c => c.id !== carId);
+            
+            // Remove bookings for this car
+            const newBookings = {};
+            Object.keys(state.bookings).forEach(key => {
+                if (!key.startsWith(carId + '_')) {
+                    newBookings[key] = state.bookings[key];
+                }
+            });
+            state.bookings = newBookings;
+
+            if (state.selectedCar === carId) {
+                state.selectedCar = null;
+                document.getElementById('no-car-message').style.display = 'flex';
+                document.getElementById('calendar-view').style.display = 'none';
+            }
+
+            await saveData();
+            renderCarList();
+            showToast('Car removed', 'success');
+        }
+
+        // Calendar navigation
+        function prevMonth() {
+            state.currentDate = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth() - 1, 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            state.currentDate = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth() + 1, 1);
+            renderCalendar();
+        }
+
+        function goToToday() {
+            state.currentDate = new Date();
+            renderCalendar();
+        }
+
+        // Render calendar
+        function renderCalendar() {
+            if (!state.selectedCar) return;
+
+            const year = state.currentDate.getFullYear();
+            const month = state.currentDate.getMonth();
+            
+            document.getElementById('current-month').textContent = 
+                `${MONTH_NAMES[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+
+            const today = new Date();
+            const container = document.getElementById('calendar-days');
+            let html = '';
+
+            for (let i = 0; i < 42; i++) {
+                const day = new Date(startDate);
+                day.setDate(startDate.getDate() + i);
+                
+                const isCurrentMonth = day.getMonth() === month;
+                const isToday = day.toDateString() === today.toDateString();
+                const dateKey = formatDateKey(day);
+                
+                const morningKey = `${state.selectedCar}_${dateKey}_morning`;
+                const eveningKey = `${state.selectedCar}_${dateKey}_evening`;
+                const morningBooking = state.bookings[morningKey];
+                const eveningBooking = state.bookings[eveningKey];
+
+                html += `
+                    <div class="calendar-day ${!isCurrentMonth ? 'other-month' : ''} ${isToday ? 'today' : ''}">
+                        <div class="day-number">
+                            <span>${day.getDate()}</span>
+                        </div>
+                        <div class="booking-slots">
+                            <div class="booking-slot morning ${morningBooking ? 'booked' : 'available'} ${morningBooking && state.isAdmin ? 'admin-view' : ''}"
+                                 onclick="handleSlotClick('${dateKey}', 'morning')"
+                                 title="${morningBooking ? 'Booked by ' + morningBooking.name : 'Click to book'}">
+                                <span class="slot-label">
+                                    <span>☀️</span>
+                                    <span>AM</span>
+                                </span>
+                                ${morningBooking ? `
+                                    <span class="booked-by">${morningBooking.name}</span>
+                                    ${state.isAdmin ? '<span class="remove-booking">✕</span>' : ''}
+                                ` : ''}
+                            </div>
+                            <div class="booking-slot evening ${eveningBooking ? 'booked' : 'available'} ${eveningBooking && state.isAdmin ? 'admin-view' : ''}"
+                                 onclick="handleSlotClick('${dateKey}', 'evening')"
+                                 title="${eveningBooking ? 'Booked by ' + eveningBooking.name : 'Click to book'}">
+                                <span class="slot-label">
+                                    <span>🌙</span>
+                                    <span>PM</span>
+                                </span>
+                                ${eveningBooking ? `
+                                    <span class="booked-by">${eveningBooking.name}</span>
+                                    ${state.isAdmin ? '<span class="remove-booking">✕</span>' : ''}
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        // Format date key
+        function formatDateKey(date) {
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        }
+
+        // Handle slot click
+        async function handleSlotClick(dateKey, slot) {
+            if (!state.selectedCar) return;
+
+            const bookingKey = `${state.selectedCar}_${dateKey}_${slot}`;
+            const booking = state.bookings[bookingKey];
+
+            if (booking) {
+                if (state.isAdmin) {
+                    // Admin removes booking
+                    delete state.bookings[bookingKey];
+                    await saveData();
+                    renderCalendar();
+                    showToast('Booking removed', 'success');
+                }
+            } else {
+                // Open booking modal
+                const [year, month, day] = dateKey.split('-');
+                const date = new Date(year, month - 1, day);
+                const slotText = slot === 'morning' ? 'Morning (6AM - 12PM)' : 'Evening (12PM - 10PM)';
+                
+                document.getElementById('booking-info').innerHTML = 
+                    `Booking for <strong>${date.toDateString()}</strong> - ${slotText}`;
+                
+                state.pendingBooking = { dateKey, slot };
+                document.getElementById('booking-modal').classList.add('active');
+                document.getElementById('booker-name').focus();
+            }
+        }
+
+        // Confirm booking
+        async function confirmBooking() {
+            const nameInput = document.getElementById('booker-name');
+            const name = nameInput.value.trim();
+
+            if (!name) {
+                showToast('Please enter your name', 'error');
+                return;
+            }
+
+            // Refresh data first to check conflicts
+            await loadDataFromBin(state.binId);
+
+            const bookingKey = `${state.selectedCar}_${state.pendingBooking.dateKey}_${state.pendingBooking.slot}`;
+            
+            if (state.bookings[bookingKey]) {
+                showToast('This slot was just booked!', 'error');
+                closeBookingModal();
+                renderCalendar();
+                return;
+            }
+
+            state.bookings[bookingKey] = {
+                name: name,
+                bookedAt: new Date().toISOString()
+            };
+
+            await saveData();
+            
+            nameInput.value = '';
+            closeBookingModal();
+            renderCalendar();
+            showToast('Booking confirmed!', 'success');
+        }
+
+        // Close booking modal
+        function closeBookingModal() {
+            document.getElementById('booking-modal').classList.remove('active');
+            document.getElementById('booker-name').value = '';
+            state.pendingBooking = null;
+        }
+
+        // Admin toggle
+        function handleAdminToggle() {
+            if (state.isAdmin) {
+                state.isAdmin = false;
+                updateAdminUI();
+                showToast('Admin mode disabled', 'success');
+            } else {
+                document.getElementById('admin-modal').classList.add('active');
+                document.getElementById('admin-code').focus();
+            }
+        }
+
+        // Verify admin code
+        function verifyAdminCode() {
+            const code = document.getElementById('admin-code').value;
+            
+            if (code === ADMIN_CODE) {
+                state.isAdmin = true;
+                closeAdminModal();
+                updateAdminUI();
+                showToast('Admin mode enabled', 'success');
+            } else {
+                showToast('Invalid code', 'error');
+            }
+        }
+
+        // Close admin modal
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.remove('active');
+            document.getElementById('admin-code').value = '';
+        }
+
+        // Update admin UI
+        function updateAdminUI() {
+            const toggle = document.getElementById('admin-toggle');
+            const icon = document.getElementById('admin-icon');
+            
+            if (state.isAdmin) {
+                toggle.classList.add('active');
+                icon.textContent = '🔓';
+            } else {
+                toggle.classList.remove('active');
+                icon.textContent = '🔒';
+            }
+            
+            renderCarList();
+            renderCalendar();
+        }
+
+        // Keyboard events
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                if (document.getElementById('admin-modal').classList.contains('active')) {
+                    verifyAdminCode();
+                } else if (document.getElementById('booking-modal').classList.contains('active')) {
+                    confirmBooking();
+                }
+            }
+            if (e.key === 'Escape') {
+                closeAdminModal();
+                closeBookingModal();
+            }
+        });
+
+        // Check if already configured
+        window.onload = function() {
+            if (state.apiKey && state.binId) {
+                // Already configured, try to load
+                document.getElementById('setup-screen').style.display = 'none';
+                document.getElementById('app-container').classList.add('active');
+                document.getElementById('loading').style.display = 'flex';
+                
+                loadDataFromBin(state.binId)
+                    .then(() => {
+                        document.getElementById('loading').style.display = 'none';
+                        renderCarList();
+                        renderCalendar();
+                    })
+                    .catch((error) => {
+                        console.error('Load error:', error);
+                        document.getElementById('loading').style.display = 'none';
+                        // Show setup screen again
+                        document.getElementById('setup-screen').style.display = 'flex';
+                        document.getElementById('app-container').classList.remove('active');
+                        document.getElementById('api-key-input').value = state.apiKey;
+                        showSetupError('Failed to load data. Please check your API key.');
+                    });
+            }
+        };
     </script>
 </body>
 </html>
